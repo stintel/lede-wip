@@ -1,0 +1,26 @@
+From a948239f51535e7df1d89893d066afecf8095c6c Mon Sep 17 00:00:00 2001
+From: Stijn Tintel <stijn@linux-ipv6.be>
+Date: Tue, 7 Mar 2017 01:02:34 +0100
+Subject: [PATCH] Replace deprecated glibc aliases.
+
+MNTTAB and MOUNTED are deprecated aliases. Replace them with
+_PATH_MNTTAB and _PATH_MOUNTED.
+
+Signed-off-by: Stijn Tintel <stijn@linux-ipv6.be>
+---
+ xbmc/cores/DllLoader/exports/emu_msvcrt.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+--- a/xbmc/cores/DllLoader/exports/emu_msvcrt.cpp
++++ b/xbmc/cores/DllLoader/exports/emu_msvcrt.cpp
+@@ -1214,8 +1214,8 @@ extern "C"
+   {
+     FILE* file = NULL;
+ #if defined(TARGET_LINUX) && !defined(TARGET_ANDROID)
+-    if (strcmp(filename, MOUNTED) == 0
+-    ||  strcmp(filename, MNTTAB) == 0)
++    if (strcmp(filename, _PATH_MOUNTED) == 0
++    ||  strcmp(filename, _PATH_MNTTAB) == 0)
+     {
+       CLog::Log(LOGINFO, "%s - something opened the mount file, let's hope it knows what it's doing", __FUNCTION__);
+       return fopen(filename, mode);

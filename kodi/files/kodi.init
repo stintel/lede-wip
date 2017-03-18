@@ -1,0 +1,16 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+USE_PROCD=1
+PROG=/usr/lib/kodi/kodi.bin
+
+start_service() {
+	mkdir -p /.kodi
+	chown -R kodi:kodi /dev/adsp /dev/audio /dev/vc-cma /dev/vc-mem /dev/vchiq /dev/vcio /dev/vcsm /.kodi
+	procd_open_instance
+	procd_set_param command "$PROG"
+	procd_set_param limits rtprio="5"
+	procd_append_param command --standalone
+	procd_append_param user kodi
+	procd_close_instance
+}
