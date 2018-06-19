@@ -1,0 +1,12 @@
+#!/bin/sh /etc/rc.common
+
+START=95
+USE_PROCD=1
+PROG=/usr/sbin/lircd-uinput
+
+start_service() {
+	mkdir -p /var/run/lirc
+	procd_open_instance
+	procd_set_param command $PROG --nodaemon
+	procd_close_instance
+}

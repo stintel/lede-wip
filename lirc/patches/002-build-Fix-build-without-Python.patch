@@ -1,0 +1,58 @@
+From 74a2bcab6bbdcffba9f928ce31674fbb76a1b6a6 Mon Sep 17 00:00:00 2001
+From: Alec Leamas <leamas.alec@gmail.com>
+Date: Sun, 10 Sep 2017 09:19:43 +0200
+Subject: [PATCH] build: Fix build without Python.
+
+Don't define HAVE_PYTHON35 when PYTHON_LIBS is empty.
+
+Also, don't build Python dependent code when HAVE_PYTHON35 is not
+defined.
+
+This fixes build failures like:
+
+Makefile:1616: recipe for target 'python-pkg/dist/lirc-0.10.0.tar.gz' failed
+make[3]: *** [python-pkg/dist/lirc-0.10.0.tar.gz] Error 1
+python-pkg/lirc/_client.c:1:20: fatal error: Python.h: \
+    No such file or directory
+---
+ Makefile.am  | 2 ++
+ configure.ac | 3 ++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 94f2f386..8f457efd 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -110,6 +110,7 @@ dist_py_pkg_doc_DATA    = python-pkg/doc/Doxyfile \
+ 
+ libpython               = $(libdir)/python$(PYTHON_VERSION)
+ pydir                   = $(libpython)/site-packages/lirc
++if HAVE_PYTHON35
+ py_LTLIBRARIES          = python-pkg/lib/_client.la
+ python_pkg_lib__client_la_SOURCES = \
+                           python-pkg/lirc/_client.c
+@@ -122,6 +123,7 @@ python_pkg_lib__client_la_LDFLAGS  = \
+                           $(PYTHON_LIBS)
+ python_pkg_lib__client_la_LIBADD = \
+                           lib/liblirc_client.la
++endif
+ 
+ pylint: .phony
+ 	$(MAKE) -C tools pylint
+diff --git a/configure.ac b/configure.ac
+index 48829316..dcf9703c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -51,7 +51,8 @@ test -z "$PYTHON_LIBS" && \
+ test -n "$PYTHON_LIBS" || \
+     AC_MSG_WARN([No python package found (missing devel package?)])
+ python_version_nodots=$(echo $PYTHON_VERSION | tr -d '.')
+-AM_CONDITIONAL(HAVE_PYTHON35, [test $python_version_nodots -ge 35])
++AM_CONDITIONAL(HAVE_PYTHON35, [test -n "$PYTHON_LIBS" && \
++			       test $python_version_nodots -ge 35])
+ CFLAGS="$CFLAGS $PYTHON_CFLAGS"
+ 
+ 
+-- 
+2.16.4
+
