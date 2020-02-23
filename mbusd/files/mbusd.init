@@ -1,0 +1,45 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+USE_PROCD=1
+PROG=/usr/bin/mbusd
+
+mbusd_instance() {
+	local \
+		device enabled loglevel maxconn mode pause port retries speed \
+		timeout wait
+
+	config_get_bool enabled "$1" enabled 0
+	[ "$enabled" -gt 0 ] || return 1
+
+	config_get device "$1" device
+	config_get loglevel "$1" loglevel
+	config_get maxconn "$1" maxconn
+	config_get mode "$1" mode
+	config_get pause "$1" pause
+	config_get port "$1" port
+	config_get retries "$1" retries
+	config_get speed "$1" speed
+	config_get timeout "$1" timeout
+	config_get wait "$1" wait
+
+	procd_open_instance
+
+	procd_set_param command $PROG -d
+
+	[ -n "$device" ] && procd_append_param command -p "$device"
+	[ -n "$loglevel" ] && procd_append_param command -l "$loglevel"
+	[ -n "$maxconn" ] && procd_append_param command -C "$maxconn"
+	[ -n "$mode" ] && procd_append_param command -m "$mode"
+	[ -n "$pause" ] && procd_append_param command -R "$pause"
+	[ -n "$port" ] && procd_append_param command -P "$port"
+	[ -n "$retries" ] && procd_append_param command -N "$retries"
+	[ -n "$speed" ] && procd_append_param command -s "$speed"
+	[ -n "$timeout" ] && procd_append_param command -T "$timeout"
+	[ -n "$wait" ] && procd_append_param command -p "$wait"
+}
+
+start_service() {
+	config_load "mbusd"
+	config_foreach mbusd_instance mbusd
+}
