@@ -1,0 +1,1 @@
+sed -i '/\.rules/d;s|default-rule-path.*$|default-rule-path: /var/lib/suricata/rules|;s/rule-files:/rule-files:\n  - suricata.rules/' /etc/suricata/suricata.yaml

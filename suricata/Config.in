@@ -1,0 +1,9 @@
+menu "Configuration"
+	depends on PACKAGE_suricata
+
+config SURICATA_PF_RING
+	bool
+	default n
+	prompt "Enable privilege separation (run lldpd with a chrooted 'lldp' user)"
+
+endmenu
