@@ -37,6 +37,8 @@ mbusd_instance() {
 	[ -n "$speed" ] && procd_append_param command -s "$speed"
 	[ -n "$timeout" ] && procd_append_param command -T "$timeout"
 	[ -n "$wait" ] && procd_append_param command -p "$wait"
+
+	procd_close_instance
 }
 
 start_service() {
