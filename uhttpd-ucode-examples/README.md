@@ -4,6 +4,13 @@
 
 Requires a shebang line.
 
+### Script
+
+Drop a ucode script in a directory configured as cgi_prefix. Sending a status
+line is required.
+
+Example: ./files/www/cgi-bin/interfaces.uc
+
 ### Template
 
 Drop a ucode template in a directory configured as cgi_prefix. It is possible
