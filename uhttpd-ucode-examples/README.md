@@ -1,5 +1,8 @@
 # Using ucode scripts or templates in uhttpd
 
+These examples call the LuCI Lua API. For this to work, the ucode-mod-lua
+package is required.
+
 ## CGI
 
 Requires a shebang line.
