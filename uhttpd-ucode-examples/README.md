@@ -21,3 +21,11 @@ to send a status header, but not required. When sending a status header, it
 should go right below the shebang line, without empty newline.
 
 Example: ./files/www/cgi-bin/syslog.uc
+
+## uhttpd-mod-ucode
+
+With uhttpd-mod-ucode, scripts are always executed in template mode.
+Configuring a ucode_prefix in uhttpd is required. For this example we used
+/ucode/env=/usr/share/ucode/uhttpd/env.uc as ucode_prefix.
+
+Example: ./files/usr/share/ucode/uhttpd/env.uc
