@@ -15,7 +15,7 @@ define Package/uhttpd-ucode-examples
   SUBMENU:=Web Servers/Proxies
   SECTION:=net
   CATEGORY:=Network
-  DEPENDS:=+ucode-mod-lua +uhttpd +uhttpd-mod-ucode
+  DEPENDS:=+ucode +ucode-mod-lua +uhttpd +uhttpd-mod-ucode
   TITLE:=uhttpd uCode examples
   PKGARCH:=all
 endef
