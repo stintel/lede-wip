@@ -16,6 +16,8 @@ PKG_HASH:=064f8d2c358895c7e0bea9ae956f8d46f3f057772cb97f2743a11d478a0f68a0
 PKG_BUILD_DIR:=$(BUILD_DIR)/platform-p8-platform-$(PKG_VERSION)
 PKG_INSTALL:=1
 
+PKG_USE_NINJA:=0
+
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
