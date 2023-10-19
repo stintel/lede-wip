@@ -1,9 +1,33 @@
 menu "Configuration"
-	depends on PACKAGE_suricata
+
+config SURICATA_AF_PACKET
+	bool "Enable AF_PACKET support"
+	default y
+
+config SURICATA_AF_XDP
+	bool "Enable AF_XDP support"
+	default n
+	select SURICATA_BPF
+
+config SURICATA_BPF
+	bool "Enable eBPF support"
+	default n
+	select SURICATA_AF_PACKET
+
+config SURICATA_NFLOG
+	bool "Enable libnetfilter_log support"
+	default n
+
+config SURICATA_NFQUEUE
+	bool "Enable NFQUEUE support for inline IDP"
+	default n
 
 config SURICATA_PF_RING
-	bool
+	bool "Enable PF_RING support"
 	default n
-	prompt "Enable privilege separation (run lldpd with a chrooted 'lldp' user)"
+
+config SURICATA_REDIS
+	bool "Enable Redis support"
+	default n
 
 endmenu
