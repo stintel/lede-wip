@@ -26,7 +26,7 @@ define Package/libcec
   CATEGORY:=Libraries
   TITLE:=libcec
   DEPENDS:= \
-	+TARGET_brcm2708:raspberrypi-userland \
+	+TARGET_brcm2708:bcm27xx-utils \
 	+libstdcpp
   URL:=http://libcec.pulse-eight.com/
   MAINTAINER:=Stijn Tintel <stijn@linux-ipv6.be>
