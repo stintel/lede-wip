@@ -52,7 +52,7 @@ define Package/kodi
   USERID:=kodi=9777:kodi=9777
   DEPENDS:= \
 	@(TARGET_brcm2708||TARGET_x86) \
-	+TARGET_brcm2708:raspberrypi-userland \
+	+TARGET_brcm2708:bcm27xx-utils \
 	+TARGET_x86:libegl \
 	+alsa-lib \
 	+bluez-libs \
