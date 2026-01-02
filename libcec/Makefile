@@ -7,7 +7,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libcec
 PKG_VERSION:=4.0.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE_URL:=https://github.com/Pulse-Eight/libcec/archive/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -43,4 +43,18 @@ define Package/libcec/install
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/*.so* $(1)/usr/lib/
 endef
 
+
+define Package/cec-client
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=cec-client
+  DEPENDS:=+libcec
+endef
+
+define Package/cec-client/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) -L $(PKG_BUILD_DIR)/src/cec-client/cec-client $(1)/usr/bin/
+endef
+
 $(eval $(call BuildPackage,libcec))
+$(eval $(call BuildPackage,cec-client))
