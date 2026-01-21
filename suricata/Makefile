@@ -71,7 +71,7 @@ CONFIGURE_ARGS += \
 	$(if $(CONFIG_PKG_ASLR_PIE),--enable-pie,--disable-pie) \
 	$(if $(CONFIG_SURICATA_AF_PACKET),--enable-af-packet,--disable-af-packet) \
 	$(if $(CONFIG_SURICATA_AF_XDP),--enable-af-xdp,--disable-af-xdp) \
-	$(if $(CONFIG_SURICATA_BFP),--enable-ebpf,--disable-ebpf) \
+	$(if $(CONFIG_SURICATA_BPF),--enable-ebpf,--disable-ebpf) \
 	$(if $(CONFIG_SURICATA_NFLOG),--enable-nflog,--disable-nflog) \
 	$(if $(CONFIG_SURICATA_NFQUEUE),--enable-nfqueue,--disable-nfqueue) \
 	$(if $(CONFIG_SURICATA_PF_RING),--enable-pfring,--disable-pfring) \
