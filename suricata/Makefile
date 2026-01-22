@@ -18,6 +18,8 @@ PKG_FIXUP:=autoreconf libtool
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
+# We cannot include rust-package.mk as there is no Cargo.toml in the topdir.
+# The suricata Makefile calls cargo to build Rust code in rust/.
 include $(TOPDIR)/feeds/packages/lang/rust/rust-values.mk
 
 define Package/suricata/Default
@@ -31,6 +33,7 @@ define Package/suricata
 $(call Package/suricata/Default)
   TITLE += Engine
   DEPENDS:= \
+	$(RUST_ARCH_DEPENDS) \
 	+SURICATA_AF_XDP:libelf \
 	+SURICATA_AF_XDP:libxdp \
 	+SURICATA_BFP:libbpf \
@@ -83,20 +86,34 @@ CONFIGURE_ARGS += \
 	--enable-python \
 	--enable-suricata-update
 
+# Notes
+# As OpenWrt doesn't have cbindgen we need to disable it to prevent host include/lib leakage
+# Disable docs build as it fails and we will not include them in the package anyway
 CONFIGURE_VARS += \
-	CARGO_BUILD_TARGET=$(RUSTC_TARGET_ARCH) \
-	CARGO_HOME=$(CARGO_HOME) \
-	ac_cv_path_CARGO=$(CARGO_HOME)/bin/cargo \
-	ac_cv_path_RUSTC=$(CARGO_HOME)/bin/rustc
+	ac_cv_path_CARGO=$(STAGING_DIR)/host/bin/cargo \
+	ac_cv_path_CBINDGEN=no \
+	ac_cv_path_RUSTC=$(STAGING_DIR)/host/bin/rustc \
+	ac_cv_path_SPHINX_BUILD=no
 
+# Notes
+# RUST_TARGET:
+# - defaults to --target $host_triplet
+# - $host_triple has -openwrt- instead of -unknown-
+# - the -openwrt- host triplet is not a valid rust target
+# - overriding host_triplet might have unexpected behaviour
+# RUST_SURICATA_LIB:
+# - default path is based on $host_triplet which does not match RUST_TARGET above
+# - for some reason the lib filename is not libsuricata_rust.a
+#
+# TODO
+# * don't harcode CARGO_CFG_TARGET_ENV=musl
+# * remove CARGO_TERM_VERBOSE=true
 MAKE_FLAGS += \
+	$(CARGO_PKG_CONFIG_VARS) \
 	CARGO_CFG_TARGET_ENV="musl" \
-	RUST_LDADD="../rust/target/$(RUSTC_TARGET_ARCH)/release/libsuricata.a -ldl -lrt -lm" \
+	CARGO_TERM_VERBOSE=true \
 	RUST_SURICATA_LIB=../rust/target/$(RUSTC_TARGET_ARCH)/release/libsuricata.a \
-	host_triplet=$(RUSTC_TARGET_ARCH)
-
-MAKE_VARS += \
-	PATH="$(CARGO_HOME)/bin:$(PATH)"
+	RUST_TARGET="--target $(RUSTC_TARGET_ARCH)"
 
 define Package/suricata/install
 	$(INSTALL_DIR) $(1)/etc/init.d
